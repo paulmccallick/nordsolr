@@ -11,11 +11,12 @@
     "source_ami": "ami-d440a6e7",
     "instance_type": "t2.micro",
     "ssh_username": "centos",
-    "ami_name": "packer-example {{timestamp}}"
+    "ami_name": "packer-example {{timestamp}}",
+    "ssh_pty": true
   }],
   "provisioners": [{
     "type": "chef-solo",
-    "cookbook_paths": ["cookbooks"],
+    "cookbook_paths": ["cookbooks","cookbooks/nordsolr/berks-cookbooks"],
     "run_list": ["nordsolr::default"]
   }]
 }
