@@ -1,6 +1,9 @@
 ---
+# note that the version below should match
+# what is in the solr.json file
 driver:
   name: vagrant
+  require_chef_omnibus: 12.7.2
 
 provisioner:
   name: chef_zero

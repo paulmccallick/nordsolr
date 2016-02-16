@@ -47,7 +47,7 @@ file "/etc/init.d/solr" do
   owner 'root'
   group 'root'
   mode 0744
-  content ::File.open(File.join(solr_directory,"bin","init.d","solr")).read
+  content lazy { ::File.open(File.join(solr_directory,"bin","init.d","solr")).read }
   action :create
 end
 
@@ -61,12 +61,6 @@ template '/etc/default/solr.in.sh' do
   source 'solr.in.sh.erb'
 end
 
-template '/var/solr/log4j.properties' do
-  owner 'solr'
-  group 'solr'
-  source 'log4j.properties.erb'
-end
-
 ['/var/solr/data','/var/log/solr'].each do |d|
   directory d do
     owner 'solr'
@@ -74,6 +68,13 @@ end
     recursive true
   end
 end
+
+template '/var/solr/log4j.properties' do
+  owner 'solr'
+  group 'solr'
+  source 'log4j.properties.erb'
+end
+
 
 service 'solr' do
   action :enable
