@@ -1,8 +1,9 @@
-solr_version = '5.4.1'
+# INSTALL JAVA
 node.default['java']['jdk_version'] = '8'
 node.default['java']['install_flavor'] = 'openjdk'
 include_recipe 'java::default'
 
+# INSTALL EC2 TOOLS
 ['vim','lsof','ruby', 'rsync'].each do |p|
   package p
 end
@@ -16,6 +17,8 @@ rpm_package 'ec2-ami-tools.noarch' do
   source ec2_rpm_path
 end
 
+# INSTALL SOLR
+solr_version = '5.4.1'
 solr_tar_path  =File.join(Chef::Config['file_cache_path'],'solr.tar.gz')
 remote_file solr_tar_path  do
   source "http://www.us.apache.org/dist/lucene/solr/#{ solr_version }/solr-#{ solr_version }.tgz"
@@ -48,11 +51,20 @@ file "/etc/init.d/solr" do
   action :create
 end
 
+# this is the file with all of the
+# juicy solr settings like java heap size
+# and gc options
 template '/etc/default/solr.in.sh' do
   owner 'root'
   group 'root'
   mode 0644
-  source 'solr.in.sh'
+  source 'solr.in.sh.erb'
+end
+
+template '/var/solr/log4j.properties' do
+  owner 'solr'
+  group 'solr'
+  source 'log4j.properties.erb'
 end
 
 ['/var/solr/data','/var/log/solr'].each do |d|
