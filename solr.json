@@ -16,7 +16,7 @@
   }],
   "provisioners": [{
     "type": "chef-solo",
-    "cookbook_paths": ["cookbooks","cookbooks/nordsolr/berks-cookbooks"],
+    "cookbook_paths": ["nordsolr/berks-cookbooks"],
     "run_list": ["nordsolr::default"],
     "install_command": "curl -L https://www.chef.io/chef/install.sh  | sudo bash -s -- -v 12.7.2"
 
